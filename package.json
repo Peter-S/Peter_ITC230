@@ -1,0 +1,20 @@
+{
+  "name": "peter_itc230",
+  "version": "1.0.0",
+  "description": "Homework for ITC230",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Peter-S/Peter_ITC230.git"
+  },
+  "author": "Peter Soukup",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Peter-S/Peter_ITC230/issues"
+  },
+  "homepage": "https://github.com/Peter-S/Peter_ITC230#readme"
+}
