@@ -1,56 +1,56 @@
-const http = require('http');
-const fs = require('fs');
-const qs = require('querystring');
+const express = require("express");
+const bodyParser = require("body-parser")
+const app = express();
 const sonics79 = require('./data');
+const qs = require('querystring');
 
-http.createServer((req,res) => {
+app.set('port', process.env.PORT || 3000);
+app.use(express.static(__dirname + '/public')); // set location for static files
+app.use(bodyParser.urlencoded({extended: true})); // parse form submissions
+
+let handlebars =  require("express-handlebars");
+app.engine(".html", handlebars({extname: '.html', defaultLayout: false}));
+app.set("view engine", ".html");
+
+app.get('/', (req, res) => {
+  players = sonics79.getAll()
+  allPlayers = [];
+  players.forEach(element => {
+    allPlayers.push(element.player)
+  });
+  res.render('index', {all: allPlayers}) 
+ });
+
+ app.get('/about', (req, res) => {
+  res.type('text/html');
+  res.sendFile(__dirname + '/about.html');
+ });
+
+ app.get('/delete', (req, res) => {
   const url = req.url.split('?');
   const queryParams = qs.parse(url[1]);
-  const path = url[0].toLowerCase();
-  
-  switch(path) {
-    case '/':
-      fs.readFile('index.html', (err, data) =>{
-      res.writeHead(200, {'Content-Type': 'text/html'});
-      res.write(data);
-      res.end();
-      });
-      break;
-    case '/about':
-      fs.readFile('about.html', (err, data) => {
-      res.writeHead(200, {'Content-Type': 'text/html'});
-      res.write(data);
-      res.end();
-      });
-      break;
+  const player = sonics79.deletePlayer(queryParams.name)
+  res.render('delete', {player: queryParams.name, deleted: player}) 
+ });
 
-    case '/getall':
-      let team = sonics79.getAll();
-      let message = JSON.stringify(team)
-      res.writeHead(200, {'Content-Type': 'text/html'});
-      res.end(message);
-      break;
+ app.post('/detail', (req, res) => {
+    let player = sonics79.get(req.body.user);
+    let nm = (player) ? JSON.stringify(player)  : 'Not Found';
+    if (nm == 'Not Found'){
+      var notFound = 'Not Found'
+      res.render('detail', {name: req.body.user, result: player, player: notFound});
+    } else {
+      var notFound = 'Found'
+      res.render('detail', {name: req.body.user, result: player, player: notFound});
+    }
+ });
 
-    case '/detail':
-      let player = sonics79.get(queryParams.player);
-      let nm = (player) ? JSON.stringify(player) : 'Not Found'
-      res.writeHead(200, {'Content-Type': 'text/html'});
-      res.end('Results for ' + queryParams.player + '\n' + nm);
-      break;
+app.use( (req,res) => {
+  res.type('text/html'); 
+  res.status(404);
+  res.sendFile(__dirname + '/error.html');
+ });
 
-    case '/delete':
-      let dplayer = sonics79.deletePlayer(queryParams.player)
-      let dnm = (dplayer) ? JSON.stringify(dplayer) : 'Not Found'
-      res.writeHead(200, {'Content-Type': 'text/html'});
-      res.end('Results for ' + queryParams.player + '\n' + dnm);
-      break;
-    
-    default:
-      fs.readFile('error.html', (err, data) => {
-        res.writeHead(404, {'Content-Type': 'text/html'});
-        res.write(data);
-        res.end();
-        });
-        break;
-    };
-}).listen(process.env.PORT || 3000);
+ app.listen(app.get('port'), () => {
+  console.log('Monkies are smart'); 
+ });
