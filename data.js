@@ -1,3 +1,4 @@
+'use strict'
 
 let sonics79 = [
   {
@@ -42,7 +43,7 @@ let sonics79 = [
 
  const deletePlayer = (player) =>
  {
-   const nl = sonics79.length
+   let nl = sonics79.length
    sonics79 = sonics79.filter((item) => 
    {
      return item.player !== player
@@ -50,10 +51,38 @@ let sonics79 = [
    return {deleted: nl !== sonics79.length, total: sonics79.length}
  }
 
+ const addPlayer = (player) => 
+ {
+   let nl = sonics79.length
+   let found = get(player.player)
+   if (!found) {
+     sonics79.push(player)
+   }
+   return {added: nl !== sonics79.length, total: sonics79.length };
+ }
+
+//  console.log('before', getAll())
+//  console.log(addPlayer({
+//   player: 'Jack Sikma',
+//   position: 'PF',
+//   number: '11'
+// }))
+
+//  sonics79.push(
+//   {
+//     player: 'Pete Soukup',
+//     position: 'PF',
+//     number: '11'
+//   }
+//  )
+
+//  console.log('after', getAll())
+//  console.log(sonics79.length)
+
 
 //  console.log(get('Dennis Johnson'))
 //  console.log(getAll())
 //  console.log(deletePlayer('Dennis Johnson'))
 //  console.log(getAll())
 
- module.exports = { get, getAll, deletePlayer }
+ module.exports = { get, getAll, deletePlayer, addPlayer }

@@ -5,16 +5,16 @@ const sonics79 = require('./data');
 const qs = require('querystring');
 
 app.set('port', process.env.PORT || 3000);
-app.use(express.static(__dirname + '/public')); // set location for static files
-app.use(bodyParser.urlencoded({extended: true})); // parse form submissions
+app.use(express.static(__dirname + '/public')); 
+app.use(bodyParser.urlencoded({extended: true}));
 
 let handlebars =  require("express-handlebars");
 app.engine(".html", handlebars({extname: '.html', defaultLayout: false}));
 app.set("view engine", ".html");
 
 app.get('/', (req, res) => {
-  players = sonics79.getAll()
-  allPlayers = [];
+  let players = sonics79.getAll()
+  let allPlayers = [];
   players.forEach(element => {
     allPlayers.push(element.player)
   });
@@ -37,10 +37,10 @@ app.get('/', (req, res) => {
     let player = sonics79.get(req.body.user);
     let nm = (player) ? JSON.stringify(player)  : 'Not Found';
     if (nm == 'Not Found'){
-      var notFound = 'Not Found'
+      let notFound = 'Not Found'
       res.render('detail', {name: req.body.user, result: player, player: notFound});
     } else {
-      var notFound = 'Found'
+      let notFound = 'Found'
       res.render('detail', {name: req.body.user, result: player, player: notFound});
     }
  });
@@ -52,5 +52,5 @@ app.use( (req,res) => {
  });
 
  app.listen(app.get('port'), () => {
-  console.log('Monkies are smart'); 
+  console.log('Monkeys are smart'); 
  });
