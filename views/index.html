@@ -1,7 +1,7 @@
 <!DOCTYPE html>
   <html>
     <body>
-      <h1>Home Page , Welcome {{name}}</h1>
+      <h1>Home Page</h1>
       <p>Yup, this is the home page!</p>
     
     <form action="/detail" method="POST">
@@ -12,7 +12,20 @@
 
     <hr>
     <h4>Names to pick from to search for details</h4>
-    <h3>{{all}}</h3>
+    {{#each all}}
+      <li>{{player}}</li>
+    {{/each}}
+
+    <hr>
+    <h4>Add a new player to the team.</h4>
+    <form action="/" method="POST">
+      Name: <input type=text name=name required>
+      <br>
+      Position: <input type=text name=position required>
+      <br>
+      Number: <input type=text name=number required>
+      <button>Add Player</button>
+  </form>
   </body>
   </html>
 

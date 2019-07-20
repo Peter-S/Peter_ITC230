@@ -3,15 +3,23 @@
     <body>
       <a href="/">Home Page</a>
       <h1>Detail Page</h1>
-      <h3>Searching for...  {{name}}</h3>
-      <li>Player: {{result.player}}</li>
-      <li>Position: {{result.position}}</li>
-      <li>Number: {{result.number}}</li>
+      <h3>Searching for...  {{result}}</h3>
 
-      <h3>{{player}}</h3>
+      {{#if name}}
+      {{#each name}}
+        <li>Name: {{player}}</li>
+        <li>Position: {{position}}</li>
+        <li>Number: {{number}}</li>
+      {{/each}}
+      {{else}}
+        <h2>Pick a Sonic!</h2>
+      {{/if}}
+
 
       <p>
-      <a href="/delete?name={{result.player}}">Delete</a>
+      <!-- <a href="/delete?name={{result.player}}">Delete</a> -->
+      <a href="/delete?name={{result}}">Delete</a>
+
       </p>
 
     </body>

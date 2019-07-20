@@ -3,9 +3,13 @@
     <body>
         <a href="/">Home Page</a>
       <h1>Delete Page</h1>
-      <h2>The name deleted is: {{player}}</h2>
+      <h2>The name deleted is: {{name}}</h2>
 
-      <h3>{{deleted.total}} Players left out of 5</h3>
+      <h3>TEAM</h3>
+      {{#each all}}
+       <li>{{player}}</li>
+      {{/each}}
+      <p><strike>{{name}}</strike></p>
 
 
     </body>

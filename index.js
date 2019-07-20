@@ -3,6 +3,7 @@ const bodyParser = require("body-parser")
 const app = express();
 const sonics79 = require('./data');
 const qs = require('querystring');
+const sonics = require('./models/sonics')
 
 app.set('port', process.env.PORT || 3000);
 app.use(express.static(__dirname + '/public')); 
@@ -12,38 +13,47 @@ let handlebars =  require("express-handlebars");
 app.engine(".html", handlebars({extname: '.html', defaultLayout: false}));
 app.set("view engine", ".html");
 
-app.get('/', (req, res) => {
-  let players = sonics79.getAll()
-  let allPlayers = [];
-  players.forEach(element => {
-    allPlayers.push(element.player)
-  });
-  res.render('index', {all: allPlayers}) 
- });
 
- app.get('/about', (req, res) => {
+app.get('/', (req, res) => {
+  sonics.find({}, (err, items) => {
+    if(err) return next (err);
+  res.render('index', {all: items}) 
+ })
+})
+
+app.get('/about', (req, res) => {
   res.type('text/html');
   res.sendFile(__dirname + '/about.html');
- });
+});
 
  app.get('/delete', (req, res) => {
-  const url = req.url.split('?');
-  const queryParams = qs.parse(url[1]);
-  const player = sonics79.deletePlayer(queryParams.name)
-  res.render('delete', {player: queryParams.name, deleted: player}) 
+    const url = req.url.split('?')
+    const queryParams = qs.parse(url[1])
+    sonics.deleteOne({player: (queryParams.name)}, (err) => {
+      if(err) console.log(err)
+      
+  })
+    sonics.find({}, (err, items) => {
+      if(err) return next (err);
+      res.render('delete', {name: queryParams.name, all: items}) 
+  })
  });
 
  app.post('/detail', (req, res) => {
-    let player = sonics79.get(req.body.user);
-    let nm = (player) ? JSON.stringify(player)  : 'Not Found';
-    if (nm == 'Not Found'){
-      let notFound = 'Not Found'
-      res.render('detail', {name: req.body.user, result: player, player: notFound});
-    } else {
-      let notFound = 'Found'
-      res.render('detail', {name: req.body.user, result: player, player: notFound});
-    }
+    sonics.find({'player':(req.body.user)}, (err, items) => {
+      if (err) return next(err);
+      let sonic = req.body.user
+      res.render('detail', {name: items, result: sonic})
+    });   
  });
+
+ app.post('/', (req, res) => {
+  let newPlayer = {'player': (req.body.name), 'position': (req.body.position), 'number': (req.body.number) }
+  sonics.updateOne({'player':'Pete Soukup'}, newPlayer, {upsert:true}, (err, result) => {
+    if (err) return next(err);
+  res.render('added', {player: newPlayer})
+ })
+})
 
 app.use( (req,res) => {
   res.type('text/html'); 
