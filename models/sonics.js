@@ -12,10 +12,14 @@ mongoose.connection.on('open', () => {
 // define Book model in JSON key/value pairs
 // values indicate the data type of each key
 const mySchema = mongoose.Schema({
- _id: String,
+//  _id: String,
  player: String,
  position: String,
- number: String
+ number: {
+   type: String,
+   required: true,
+   unique: true
+ }
 }); 
 
 module.exports = mongoose.model('sonics', mySchema);
