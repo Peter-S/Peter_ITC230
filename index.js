@@ -19,9 +19,10 @@ app.set("view engine", ".html");
 
 
 app.get('/', (req, res) => {
-  sonics.find({}, (err, items) => {
+  sonics.find({}, (err, sonics) => {
     if(err) return next (err);
-  res.render('index', {all: items}) 
+  // res.render('index', {all: items}) 
+  res.render('home', {sonics: JSON.stringify(sonics)}) 
  })
 })
 

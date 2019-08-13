@@ -1,0 +1,86 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>React App Starter Page</title>
+
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.6.2/react.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/15.6.1/react-dom.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.25.0/babel.min.js"></script>
+
+</head>
+<body>
+
+  <div id="root"></div>
+
+<!-- NOTE: script type declaration to support JSX -->
+<script type="text/babel">
+
+ 
+    class MyApp extends React.Component {
+      constructor(props){
+        super(props);
+        // data from server 
+        this.state = {
+          sonics79: {{{sonics}}},
+          curItem: {}
+        }
+
+        this.showDetail = this.showDetail.bind(this)
+      }
+
+      showDetail(event) {
+        let editItem = this.state.sonics79.find((item) => {
+          return item._id == event.target.id
+        })
+        this.setState({curItem: editItem})
+      }
+    
+      render() {
+        return (
+        <div>
+          <Title title="Seattle Super Sonics 1979" />
+          <Players 
+            sonics79={this.state.sonics79}
+            clickhandler={this.showDetail}/>
+          <Details item={this.state.curItem}/>
+        </div>
+
+        );
+      }    
+    }
+
+    const Title = ({title}) => {
+      // simple component w/ single property
+      return <div><h2>{title}</h2></div>;
+    }
+    
+    const Players = (props) => {
+      let player_list = props.sonics79.map((item) => {
+        return <li onClick={props.clickhandler} id={item._id} key={item._id}>{item.player}</li>
+      })
+      return (
+        <div>
+          Sonics 1979 Players
+          <ul>
+            {player_list}
+          </ul>
+        </div>)
+    }
+
+    const Details = (props) =>  {
+      return (
+        <div>
+          <h3>Details</h3>
+          Player: {props.item.player}<br/>
+          Position: {props.item.position}<br/>
+          Number: {props.item.number}<br/>
+        </div>
+      )
+    }
+    
+    ReactDOM.render(<MyApp />, document.getElementById('root'));
+</script>  
+
+</body>
+</html>

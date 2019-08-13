@@ -25,8 +25,13 @@ let sonics79 = [
     player: 'Jack Sikma',
     position: 'C',
     number: '43'
+  },
+  {
+    player: 'Pete Soukup',
+    position: 'Super Gaurd',
+    number: '11'
   }
- ];
+ ]
 
  const getAll = () =>
  {
