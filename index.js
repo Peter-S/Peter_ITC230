@@ -96,24 +96,23 @@ app.get('/api/v1/delete', (req, res) => {
     })
 })
 
-app.post('/api/v1/add', (req, res) => {
+app.post('/api/v1/add/', (req, res) => {
   if(!req.body) {
     return res.status(400).send('Missing the body')
   }
-  let model = new sonics(req.body)
-  model.save()
-    .then(doc => {
-      if(!doc || doc.length === 0) {
-        return res.status(500).send(doc)
-      }
-      res.status(201).send(doc)
-    })
-    .catch(err => {
-      res.status(500).json(err)
-    })
+    let model = new sonics(req.body)
+    model.save()
+      .then(doc => {
+        if(!doc || doc.length === 0) {
+          return res.status(500).send(doc)
+        } 
+        res.status(201).send(doc)
+      })
+      .catch(err => {
+        res.status(500).json(err)
+      })
+    
 })
-
-
 
 app.use( (req,res) => {
   res.type('text/html'); 

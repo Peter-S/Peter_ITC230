@@ -15,11 +15,12 @@ const mySchema = mongoose.Schema({
 //  _id: String,
  player: String,
  position: String,
- number: {
-   type: String,
-   required: true,
-   unique: true
- }
+ number: String
+//  {
+//    type: String,
+//    required: true,
+//    unique: true
+//  }
 }); 
 
 module.exports = mongoose.model('sonics', mySchema);

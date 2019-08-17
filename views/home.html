@@ -27,6 +27,11 @@
         }
 
         this.showDetail = this.showDetail.bind(this)
+        this.changeHandler = this.changeHandler.bind(this)
+        this.onClear = this.onClear.bind(this)
+        this.saveHandler = this.saveHandler.bind(this)
+
+
       }
 
       showDetail(event) {
@@ -35,7 +40,30 @@
         })
         this.setState({curItem: editItem})
       }
-    
+
+      changeHandler(event) {
+        let newItem = this.state.curItem
+        newItem[event.target.name] = event.target.value
+        this.setState({curItem: newItem})
+      }
+
+      onClear() {
+        this.setState({curItem: {}});
+      }
+
+      saveHandler() {
+        console.log('save')
+        let newItem = this.state.curItem
+        fetch("/api/v1/add/", {
+          method: "POST",
+        	headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newItem)
+        }).then(res => res.json())
+        	.then((json) => {
+            console.log(json)
+        })
+      }
+
       render() {
         return (
         <div>
@@ -43,7 +71,11 @@
           <Players 
             sonics79={this.state.sonics79}
             clickhandler={this.showDetail}/>
-          <Details item={this.state.curItem}/>
+          <Details 
+            item={this.state.curItem}
+            change={this.changeHandler}
+            reset={this.onClear}
+            save={this.saveHandler}/>
         </div>
 
         );
@@ -72,9 +104,16 @@
       return (
         <div>
           <h3>Details</h3>
-          Player: {props.item.player}<br/>
-          Position: {props.item.position}<br/>
-          Number: {props.item.number}<br/>
+          <form>
+          Player: <input onChange={props.change} name='player' value={props.item.player || ''} /><p/>
+          Position: <input onChange={props.change} name='position' value={props.item.position || ''} /><p/>
+          Number: <input onChange={props.change} name='number' value={props.item.number || ''} /><p/>
+          </form>
+          <button onClick={props.save}>Save</button>  
+          <button onClick={props.reset}>Reset</button> 
+          <button onClick={props.delete}>Delete</button>
+
+          
         </div>
       )
     }
